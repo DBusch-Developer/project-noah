@@ -1,0 +1,442 @@
+PROJECT NOAH - TEAM SYNC FILE
+
+Project Name: Project Noah
+Project Type: 2-day full-stack team build
+Team Members: Diana Busch - Senior Developer, Darla - Junior Developer
+Database: Neon PostgreSQL
+ORM: Prisma
+Primary UI Concept: Satellite-first global animal intelligence map
+Visual Style: Dark command-center interface with green radar-style accents
+
+============================================================
+PROJECT VISION
+============================================================
+
+Project Noah is a planetary-scale animal intelligence network. Powered by orbital thought-translation satellites, it gathers, translates, and maps animal thoughts worldwide, providing real-time insights into behavior, emotion, migration, and ecosystem health.
+
+The app should feel like Google Earth meets Doppler radar meets a wildlife intelligence dashboard.
+
+The user should land directly on a global satellite map, not a card grid. The satellite map is the main product experience.
+
+Users can explore Earth from above, zoom into regions, see animals in their real environments, filter animal activity, and read thought bubbles when they get close enough.
+
+============================================================
+CORE EXPERIENCE
+============================================================
+
+1. User opens Project Noah.
+2. They see a dark, satellite-style global map.
+3. Animal activity markers appear across the world.
+4. The left sidebar lets users filter by animal, mood, emotion, region, and search terms.
+5. The bottom dashboard shows live stats based on the visible map area.
+6. As the user zooms closer, animals become more detailed.
+7. At close zoom levels, thought bubbles appear above animal markers.
+8. Clicking an animal opens more detail about that animal, including thought history.
+
+The priority is to make the map feel like a live satellite intelligence system.
+
+============================================================
+DESIGN DIRECTION
+============================================================
+
+Use:
+- Satellite imagery as the primary map style
+- Dark UI panels
+- Green accent color
+- Radar-inspired details
+- Glowing markers
+- Subtle scanline / telemetry / signal language where appropriate
+- Compact dashboard elements
+- Clean readable typography
+
+Avoid:
+- Bright playful pet-app colors
+- Large animal card grid as the homepage
+- Overly cute design
+- Too many shared files being edited by both teammates
+
+Suggested vibe words:
+- orbital
+- signal
+- scan
+- transmission
+- coordinates
+- satellite feed
+- translated thought
+- emotional reading
+- species activity
+- ecosystem status
+
+============================================================
+TECH STACK
+============================================================
+
+Frontend:
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+
+Backend:
+- Next.js API routes or server actions
+
+Database:
+- Neon PostgreSQL
+
+ORM:
+- Prisma
+
+Map:
+- Mapbox GL JS preferred
+- Use a satellite map style
+- If globe mode is available and stable, use it
+- If globe mode causes issues, prioritize a smooth satellite map over a broken globe
+
+Recommended Mapbox styles:
+- mapbox://styles/mapbox/satellite-v9
+- mapbox://styles/mapbox/satellite-streets-v12
+
+Use satellite-streets if labels are helpful.
+Use satellite-v9 if the team wants a cleaner intelligence-dashboard look.
+
+============================================================
+DATABASE MODELS
+============================================================
+
+Minimum models:
+
+Animal
+- id
+- name
+- species
+- region
+- latitude
+- longitude
+- mood
+- emotion
+- status
+- createdAt
+- updatedAt
+
+Thought
+- id
+- animalId
+- text
+- intensity
+- createdAt
+
+Favorites will be stored in localStorage for the MVP.
+No User model or authentication required.
+
+Keep the schema simple. Do not add unnecessary complexity unless the core app is already working.
+
+============================================================
+GIT WORKFLOW RULES
+============================================================
+
+Use feature branches only. Do not push directly to main.
+
+Branch naming:
+- diana/map-shell
+- diana/mapbox-satellite
+- diana/api-prisma
+- diana/stats-dashboard
+- darla/sidebar-filters
+- darla/seed-data
+- darla/thought-bubbles
+
+Pull request rules:
+- Each feature gets its own branch and PR
+- Keep PRs small
+- One person reviews before merge when possible
+- Communicate before editing shared layout files
+- Pull latest main before starting new work
+- Resolve conflicts immediately, not at the end
+
+Commit message examples:
+- Add satellite map shell
+- Add animal seed data
+- Add sidebar filter UI
+- Add map stats dashboard
+- Add thought bubble component
+
+============================================================
+MERGE CONFLICT PREVENTION
+============================================================
+
+Diana owns:
+- app shell layout
+- map integration
+- Prisma schema
+- API routes
+- stats dashboard logic
+- deployment configuration
+
+Darla owns:
+- filter sidebar component
+- seed animal data content
+- thought bubble component styling
+
+Avoid both editing these files at the same time:
+- prisma/schema.prisma
+- app/page.tsx
+- app/layout.tsx
+- package.json
+- .env.example
+- tailwind.config.ts
+
+Recommended file ownership:
+
+Diana files:
+- app/page.tsx
+- app/api/animals/route.ts
+- app/api/thoughts/route.ts
+- prisma/schema.prisma
+- prisma/seed.ts
+- components/map/SatelliteMap.tsx
+- components/dashboard/MapStatsBar.tsx
+
+Darla files:
+- components/sidebar/FilterSidebar.tsx
+- components/map/ThoughtBubble.tsx
+- components/ui/SignalBadge.tsx
+- lib/seedAnimals.ts
+
+============================================================
+DIANA TASKS - SENIOR DEVELOPER
+============================================================
+
+Diana should take the harder architecture, backend, and integration tasks.
+
+Feature 1: Satellite Map Homepage
+- Build the main homepage around the satellite map.
+- Map should load as the central experience.
+- Use Mapbox GL JS with a satellite style.
+- Add animal markers based on database or seed data.
+- Make markers feel like radar/satellite detections.
+
+Feature 2: Map Zoom Behavior
+- Configure zoom behavior so the app feels like a satellite intelligence tool.
+- At broad zoom levels: show clustered/global activity.
+- At closer zoom levels: show individual animal markers.
+- At close zoom levels: allow thought bubbles to appear.
+
+Feature 3: Prisma + Neon PostgreSQL Setup
+- Set up Prisma.
+- Connect to Neon PostgreSQL.
+- Create Animal and Thought models.
+- Run migrations.
+- Confirm data can be stored and retrieved.
+
+Feature 4: Animal API Routes
+- Create API routes for retrieving animals.
+- Support basic query/filter parameters if time allows.
+- Example filters: species, mood, emotion, region.
+
+Feature 5: Thought API Routes
+- Create API routes for retrieving animal thoughts.
+- Create or seed thought history.
+- Connect thoughts to animals.
+
+Feature 6: Bottom Stats Dashboard
+- Create the bottom stats bar.
+- Stats should update based on filtered animals or visible animals if possible.
+- Minimum stats:
+  - animals detected
+  - dominant mood
+  - top species
+  - active regions
+
+Feature 7: App Layout + Visual System
+- Establish the dark command-center design.
+- Add green accents.
+- Create the main page structure:
+  - left sidebar
+  - satellite map center
+  - bottom stats dashboard
+
+Feature 8: Deployment Support
+- Prepare env variables.
+- Make sure Neon and Prisma are documented.
+- Help deploy to Vercel if the team gets that far.
+
+============================================================
+DARLA TASKS - JUNIOR DEVELOPER
+============================================================
+
+Task 1: Filter Sidebar UI
+Build the left sidebar component.
+
+Requirements:
+- Search input
+- Species filter
+- Mood filter
+- Region filter
+- Emotion filter
+- Clear filters button
+- Match the dark/green command-center style
+
+Suggested file:
+- components/sidebar/FilterSidebar.tsx
+
+This is important because the sidebar makes the app feel like a real intelligence dashboard.
+
+Task 2: Seed Animal Data Content
+Create a useful set of sample animals and thoughts.
+
+Requirements:
+- At least 50 animals
+- Include different species
+- Include different regions
+- Include latitude and longitude
+- Include mood and emotion
+- Include at least one thought per animal
+
+Suggested file:
+- lib/seedAnimals.ts
+
+Example animals:
+- Humpback whale in the Pacific Ocean
+- Bald eagle in Arizona
+- Golden retriever in Phoenix
+- African elephant in Kenya
+- Sea turtle near Costa Rica
+- Penguin in Antarctica
+- Wolf in Yellowstone
+- Orangutan in Borneo
+
+This is important because the demo depends on believable data.
+
+Task 3: Thought Bubble Component
+Create the visual thought bubble that appears near animals at close zoom.
+
+Requirements:
+- Displays animal name
+- Displays species
+- Displays current thought
+- Displays mood or emotion badge
+- Styled like a satellite transmission popup
+- Should be reusable
+
+Suggested file:
+- components/map/ThoughtBubble.tsx
+
+This is important because the thought bubbles are the emotional payoff of the app.
+
+============================================================
+MVP FEATURE CHECKLIST
+============================================================
+
+Must have:
+- Satellite map loads
+- Animals appear on map
+- Left sidebar exists
+- Bottom stats bar exists
+- Animal data stored in Neon PostgreSQL
+- Prisma ORM used
+- Thoughts stored and displayed
+- Thought bubbles appear when interacting with close animal markers
+- Dark radar-style visual theme
+
+Nice to have:
+- Filters actually update markers
+- Map stats update based on filters
+- Favorites
+- Animal detail page
+- Thought history modal
+- Marker clustering
+- Region-based analytics
+- AI-generated thoughts
+
+Do not prioritize until MVP works:
+- Authentication
+- Real-time websockets
+- Complex animations
+- User roles
+- Payment features
+- True live animal tracking
+
+============================================================
+DEMO SCRIPT
+============================================================
+
+Suggested demo intro:
+
+In our fictional world, scientists invented a machine that can translate animal thoughts into human language. Project Noah takes that machine and launches it into orbit as a satellite intelligence network. Our application is the public interface to that network. It lets researchers, conservationists, organizations, and pet owners explore animal thoughts across Earth through a satellite map.
+
+Demo flow:
+1. Open the app.
+2. Show the satellite map.
+3. Explain the dark radar-style interface.
+4. Use the sidebar filters.
+5. Zoom into a region.
+6. Click an animal marker.
+7. Show the thought bubble.
+8. Show bottom stats changing or reflecting the current data.
+9. Explain that animal and thought data is stored in Neon PostgreSQL using Prisma.
+10. Each teammate explains their contribution.
+
+============================================================
+WHAT EACH PERSON SHOULD SAY IN DEMO
+============================================================
+
+Diana:
+- I worked on the satellite map experience, application architecture, Prisma setup, Neon PostgreSQL integration, API routes, and the dashboard logic.
+- I focused on making the app feel like a real global animal intelligence platform instead of a basic CRUD app.
+
+Darla:
+- I worked on the filter sidebar, the animal seed data, and the thought bubble component.
+- My work helped make the interface searchable, gave the demo believable animal data, and created the moment where users can actually read translated animal thoughts.
+
+============================================================
+PROJECT PRIORITIES
+============================================================
+
+Priority 1:
+Make the satellite map work.
+
+Priority 2:
+Make animal markers appear.
+
+Priority 3:
+Connect data through Prisma and Neon PostgreSQL.
+
+Priority 4:
+Add sidebar filters and thought bubbles.
+
+Priority 5:
+Polish the radar-style UI.
+
+============================================================
+AI COLLABORATION INSTRUCTIONS
+============================================================
+
+Any AI assistant helping with this project should follow these rules:
+
+1. Do not redesign the project into a card-based app.
+2. The main interface is a satellite map.
+3. Keep the visual style dark with green radar/satellite accents.
+4. Avoid creating unnecessary files or complex architecture.
+5. Preserve the team task division.
+6. Give Diana the harder integration and architecture tasks.
+7. Give Darla only the three assigned junior-friendly tasks.
+8. Avoid editing files owned by the other teammate unless explicitly asked.
+9. Prefer small, isolated components to prevent merge conflicts.
+10. Use Prisma and Neon PostgreSQL.
+11. Keep the app demo-ready over perfect.
+12. Do not add authentication unless all MVP features are complete.
+13. Do not introduce PostGIS for this two-day build.
+14. If map globe mode becomes unstable, use a reliable satellite map instead.
+15. Prioritize working software over ambitious unfinished features.
+
+============================================================
+FINAL PRODUCT POSITIONING
+============================================================
+
+Project Noah is not a pet social app.
+Project Noah is not an animal card gallery.
+Project Noah is not just a CRUD dashboard.
+
+Project Noah is a satellite-powered animal intelligence platform.
+
+The user should feel like they are accessing a classified orbital system that lets humanity listen to animals for the first time.
