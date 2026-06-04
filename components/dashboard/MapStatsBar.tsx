@@ -1,22 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import type { Animal } from '@/components/MapShell'
 
-type Animal = {
-  id: string
-  species: string
-  mood: string
-  region: string
-}
-
-type Stats = {
-  count: number
-  dominantMood: string
-  topSpecies: string
-  activeRegions: number
-}
-
-function computeStats(animals: Animal[]): Stats {
+function computeStats(animals: Animal[]) {
   if (animals.length === 0) {
     return { count: 0, dominantMood: '—', topSpecies: '—', activeRegions: 0 }
   }
@@ -37,14 +23,8 @@ function computeStats(animals: Animal[]): Stats {
   return { count: animals.length, dominantMood, topSpecies, activeRegions: regions.size }
 }
 
-export default function MapStatsBar() {
-  const [stats, setStats] = useState<Stats>({ count: 0, dominantMood: '—', topSpecies: '—', activeRegions: 0 })
-
-  useEffect(() => {
-    fetch('/api/animals')
-      .then(r => r.json())
-      .then((animals: Animal[]) => setStats(computeStats(animals)))
-  }, [])
+export default function MapStatsBar({ animals }: { animals: Animal[] }) {
+  const stats = computeStats(animals)
 
   return (
     <div className="h-12 flex items-center gap-px bg-[#050c08] border-t border-green-500/20 font-mono text-xs shrink-0">
