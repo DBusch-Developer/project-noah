@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Map, { Marker, Popup, NavigationControl, type ViewStateChangeEvent } from 'react-map-gl/mapbox'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import type { Animal } from '@/components/MapShell'
+import ThoughtBubble from '@/components/map/ThoughtBubble'
 
 const SPECIES_EMOJI: Record<string, string> = {
   'Bald Eagle': '🦅',
@@ -63,15 +64,6 @@ function getEmoji(species: string) {
   return SPECIES_EMOJI[species] ?? '🐾'
 }
 
-const MOOD_COLOR: Record<string, string> = {
-  calm:     'text-blue-300 border-blue-400/40',
-  alert:    'text-yellow-300 border-yellow-400/40',
-  curious:  'text-purple-300 border-purple-400/40',
-  restless: 'text-orange-300 border-orange-400/40',
-  content:  'text-green-300 border-green-400/40',
-  anxious:  'text-red-300 border-red-400/40',
-  playful:  'text-pink-300 border-pink-400/40',
-}
 
 export default function SatelliteMap({ animals }: { animals: Animal[] }) {
   const [selected, setSelected] = useState<Animal | null>(null)
@@ -136,45 +128,14 @@ export default function SatelliteMap({ animals }: { animals: Animal[] }) {
           closeOnClick={false}
           offset={isClose ? 60 : 16}
         >
-          <div className="min-w-[240px]">
-
-            {/* Character portrait */}
-            <div className="flex items-center gap-3 mb-3 pb-3 border-b border-green-500/20">
-              <div
-                className="text-5xl leading-none drop-shadow-[0_0_12px_rgba(34,197,94,0.8)]"
-                style={{ animation: 'npc-float 3s ease-in-out infinite' }}
-              >
-                {getEmoji(selected.species)}
-              </div>
-              <div className="flex flex-col gap-1">
-                <p className="text-white font-semibold text-sm leading-tight">{selected.name}</p>
-                <p className="font-mono text-[9px] tracking-widest text-green-400/80">
-                  {selected.species.toUpperCase()}
-                </p>
-                <p className="font-mono text-[9px] text-green-500/50">{selected.region}</p>
-              </div>
+          <div className="flex flex-col items-center pb-1">
+            <div
+              className="text-5xl leading-none drop-shadow-[0_0_12px_rgba(34,197,94,0.8)] mb-2"
+              style={{ animation: 'npc-float 3s ease-in-out infinite' }}
+            >
+              {getEmoji(selected.species)}
             </div>
-
-            {/* Mood + emotion badges */}
-            <div className="flex gap-1.5 mb-3">
-              <span className={`px-2 py-0.5 rounded border font-mono text-[9px] tracking-wide ${MOOD_COLOR[selected.mood] ?? 'text-green-300 border-green-400/40'}`}>
-                {selected.mood.toUpperCase()}
-              </span>
-              <span className="px-2 py-0.5 rounded border border-green-500/20 font-mono text-[9px] tracking-wide text-green-500/60">
-                {selected.emotion.toUpperCase()}
-              </span>
-            </div>
-
-            {/* Thought */}
-            {selected.thoughts[0] && (
-              <div className="bg-black/30 border border-green-500/15 rounded p-2">
-                <p className="font-mono text-[9px] tracking-widest text-green-500/50 mb-1">◈ TRANSLATED THOUGHT</p>
-                <p className="text-zinc-200 italic text-xs leading-relaxed">
-                  &ldquo;{selected.thoughts[0].text}&rdquo;
-                </p>
-              </div>
-            )}
-
+            <ThoughtBubble animal={selected} showThought={isClose} />
           </div>
         </Popup>
       )}
