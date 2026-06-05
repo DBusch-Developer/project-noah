@@ -9,6 +9,9 @@ export async function GET(request: NextRequest) {
   const emotion = searchParams.get('emotion')
   const region = searchParams.get('region')
   const search = searchParams.get('search')
+  const distress = searchParams.get('distress') === '1'
+
+  const DISTRESS = ['scared', 'desperate', 'dying', 'grieving', 'sad', 'lonely', 'anxious', 'exhausted']
 
   const animals = await prisma.animal.findMany({
     where: {
@@ -16,6 +19,7 @@ export async function GET(request: NextRequest) {
       ...(mood && { mood: { equals: mood, mode: 'insensitive' } }),
       ...(emotion && { emotion: { equals: emotion, mode: 'insensitive' } }),
       ...(region && { region: { contains: region, mode: 'insensitive' } }),
+      ...(distress && { emotion: { in: DISTRESS } }),
       ...(search && {
         OR: [
           { name: { contains: search, mode: 'insensitive' } },
@@ -24,13 +28,25 @@ export async function GET(request: NextRequest) {
         ],
       }),
     },
-    include: {
+    select: {
+      id: true,
+      name: true,
+      species: true,
+      region: true,
+      latitude: true,
+      longitude: true,
+      mood: true,
+      emotion: true,
+      photoUrl: true,
+      photoAttribution: true,
       thoughts: {
         orderBy: { createdAt: 'desc' },
-        take: 1,
+        take: 4,
+        select: { id: true, text: true, intensity: true },
       },
-    },
-    orderBy: { createdAt: 'desc' },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any,
+    take: 2000,
   })
 
   return Response.json(animals)
