@@ -17,12 +17,23 @@ const ANIMAL_TAXA = [
   'Insecta', 'Arachnida', 'Mollusca', 'Animalia',
 ]
 
+// Some display names don't match iNaturalist species-level entries.
+// Grizzly Bear is a subspecies of Brown Bear; Golden Retriever is a breed.
+// Map them to a query that iNaturalist actually resolves.
+const SEARCH_OVERRIDE: Record<string, { q: string; rank?: string }> = {
+  'Grizzly Bear':    { q: 'Ursus arctos', rank: 'species' },
+  'Golden Retriever':{ q: 'Canis lupus familiaris' },         // no rank filter — breed-level
+  'Pink River Dolphin': { q: 'Inia geoffrensis', rank: 'species' },
+  'Wandering Albatross':{ q: 'Diomedea exulans', rank: 'species' },
+}
+
 async function fetchSpeciesPhoto(species: string): Promise<Photo> {
+  const override = SEARCH_OVERRIDE[species]
   const params = new URLSearchParams({
-    q: species,
-    rank: 'species',
+    q: override?.q ?? species,
     per_page: '5',
   })
+  if (override?.rank !== undefined || !override) params.set('rank', 'species')
   for (const t of ANIMAL_TAXA) params.append('iconic_taxa[]', t)
   const endpoint = `https://api.inaturalist.org/v1/taxa?${params}`
   try {
