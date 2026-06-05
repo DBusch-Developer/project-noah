@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { MOOD_VALUES, EMOTION_VALUES } from '@/lib/seedAnimals'
+import { SPECIES_LIST } from '@/lib/generateSeed'
 
 export type FilterState = {
   search: string
@@ -9,6 +10,7 @@ export type FilterState = {
   mood: string
   region: string
   emotion: string
+  distress: boolean
 }
 
 const EMPTY_FILTERS: FilterState = {
@@ -17,23 +19,8 @@ const EMPTY_FILTERS: FilterState = {
   mood: '',
   region: '',
   emotion: '',
+  distress: false,
 }
-
-const SPECIES_OPTIONS = [
-  'African Elephant', 'African Lion', 'American Bison', 'Andean Condor',
-  'Asian Elephant', 'Atlantic Puffin', 'Bald Eagle', 'Bengal Tiger',
-  'Blue Whale', 'Blue-footed Booby', 'Brown Bear', 'Cheetah',
-  'Emperor Penguin', 'Eurasian Lynx', 'Giant Anteater', 'Giant Panda',
-  'Giraffe', 'Golden Retriever', 'Gray Wolf', 'Great White Shark',
-  'Green Sea Turtle', 'Grizzly Bear', 'Hippopotamus', 'Humpback Whale',
-  'Jaguar', 'Japanese Macaque', 'Kiwi', 'Koala', 'Komodo Dragon',
-  'Leopard Seal', 'Monarch Butterfly', 'Mountain Gorilla', 'Mountain Lion',
-  'Narwhal', 'Nile Crocodile', 'Oceanic Manta Ray', 'Orangutan', 'Orca',
-  'Pink River Dolphin', 'Polar Bear', 'Red Fox', 'Red Kangaroo',
-  'Sea Otter', 'Siberian Tiger', 'Snow Leopard', 'Snowy Owl',
-  'Tasmanian Devil', 'Wandering Albatross', 'Weddell Seal', 'White Stork',
-  'Zebra',
-]
 
 const REGION_OPTIONS = [
   'Africa', 'Antarctica', 'Arctic', 'Arctic Ocean', 'Asia',
@@ -43,12 +30,13 @@ const REGION_OPTIONS = [
 
 type Props = {
   onFilterChange?: (filters: FilterState) => void
+  count?: number
 }
 
-export default function FilterSidebar({ onFilterChange }: Props) {
+export default function FilterSidebar({ onFilterChange, count }: Props) {
   const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS)
 
-  function update(key: keyof FilterState, value: string) {
+  function update<K extends keyof FilterState>(key: K, value: FilterState[K]) {
     const next = { ...filters, [key]: value }
     setFilters(next)
     onFilterChange?.(next)
@@ -59,27 +47,29 @@ export default function FilterSidebar({ onFilterChange }: Props) {
     onFilterChange?.(EMPTY_FILTERS)
   }
 
-  const isActive = Object.values(filters).some(v => v !== '')
+  const isActive = filters.distress || Object.entries(filters).some(
+    ([k, v]) => k !== 'distress' && v !== ''
+  )
 
   return (
-    <aside className="w-64 flex-shrink-0 flex flex-col bg-[#080c0f] border-r border-green-500/20 overflow-y-auto">
+    <aside className="w-64 flex-shrink-0 flex flex-col bg-[var(--surface)] border-r border-[var(--line)] overflow-y-auto">
 
       {/* Header */}
-      <div className="px-4 pt-5 pb-4 border-b border-green-500/20">
+      <div className="px-4 pt-5 pb-4 border-b border-[var(--line)]">
         <div className="flex items-center gap-2 mb-1">
-          <div className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_6px_rgba(34,197,94,0.9)] animate-pulse" />
-          <span className="font-mono text-[10px] tracking-[0.2em] text-green-400 uppercase">
+          <div className="w-2 h-2 rounded-full bg-teal-400 shadow-[0_0_6px_rgba(45,212,191,0.9)] animate-pulse" />
+          <span className="font-mono text-[10px] tracking-[0.2em] text-teal-400 uppercase">
             Project Noah
           </span>
         </div>
-        <p className="font-mono text-[9px] tracking-[0.15em] text-green-500/50 uppercase pl-4">
+        <p className="font-mono text-[9px] tracking-[0.15em] text-[var(--muted)] uppercase pl-4">
           Satellite Intel Network
         </p>
       </div>
 
       {/* Scan label */}
       <div className="px-4 pt-4 pb-2">
-        <p className="font-mono text-[9px] tracking-[0.2em] text-green-500/60 uppercase">
+        <p className="font-mono text-[9px] tracking-[0.2em] text-[var(--muted)] uppercase">
           ◈ Scan Parameters
         </p>
       </div>
@@ -89,7 +79,7 @@ export default function FilterSidebar({ onFilterChange }: Props) {
 
         {/* Search */}
         <div className="flex flex-col gap-1.5">
-          <label className="font-mono text-[9px] tracking-[0.18em] text-green-400/70 uppercase">
+          <label className="font-mono text-[9px] tracking-[0.18em] text-teal-400/70 uppercase">
             Search
           </label>
           <input
@@ -97,22 +87,22 @@ export default function FilterSidebar({ onFilterChange }: Props) {
             value={filters.search}
             onChange={e => update('search', e.target.value)}
             placeholder="name, species, region..."
-            className="w-full bg-[#0a1410] border border-green-500/25 rounded px-3 py-2 text-xs text-green-100 placeholder-green-500/30 font-mono focus:outline-none focus:border-green-400/60 focus:shadow-[0_0_8px_rgba(34,197,94,0.15)] transition-all"
+            className="w-full bg-[var(--surface-2)] border border-[var(--line)] rounded px-3 py-2 text-xs text-white placeholder-[var(--muted)] font-mono focus:outline-none focus:border-teal-400/60 focus:shadow-[0_0_8px_rgba(45,212,191,0.15)] transition-all"
           />
         </div>
 
         {/* Species */}
         <div className="flex flex-col gap-1.5">
-          <label className="font-mono text-[9px] tracking-[0.18em] text-green-400/70 uppercase">
+          <label className="font-mono text-[9px] tracking-[0.18em] text-teal-400/70 uppercase">
             Species
           </label>
           <select
             value={filters.species}
             onChange={e => update('species', e.target.value)}
-            className="w-full bg-[#0a1410] border border-green-500/25 rounded px-3 py-2 text-xs text-green-100 font-mono focus:outline-none focus:border-green-400/60 focus:shadow-[0_0_8px_rgba(34,197,94,0.15)] transition-all appearance-none cursor-pointer"
+            className="w-full bg-[var(--surface-2)] border border-[var(--line)] rounded px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-teal-400/60 focus:shadow-[0_0_8px_rgba(45,212,191,0.15)] transition-all appearance-none cursor-pointer"
           >
             <option value="">All Species</option>
-            {SPECIES_OPTIONS.map(s => (
+            {SPECIES_LIST.map(s => (
               <option key={s} value={s}>{s}</option>
             ))}
           </select>
@@ -120,13 +110,13 @@ export default function FilterSidebar({ onFilterChange }: Props) {
 
         {/* Region */}
         <div className="flex flex-col gap-1.5">
-          <label className="font-mono text-[9px] tracking-[0.18em] text-green-400/70 uppercase">
+          <label className="font-mono text-[9px] tracking-[0.18em] text-teal-400/70 uppercase">
             Region
           </label>
           <select
             value={filters.region}
             onChange={e => update('region', e.target.value)}
-            className="w-full bg-[#0a1410] border border-green-500/25 rounded px-3 py-2 text-xs text-green-100 font-mono focus:outline-none focus:border-green-400/60 focus:shadow-[0_0_8px_rgba(34,197,94,0.15)] transition-all appearance-none cursor-pointer"
+            className="w-full bg-[var(--surface-2)] border border-[var(--line)] rounded px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-teal-400/60 focus:shadow-[0_0_8px_rgba(45,212,191,0.15)] transition-all appearance-none cursor-pointer"
           >
             <option value="">All Regions</option>
             {REGION_OPTIONS.map(r => (
@@ -137,13 +127,13 @@ export default function FilterSidebar({ onFilterChange }: Props) {
 
         {/* Mood */}
         <div className="flex flex-col gap-1.5">
-          <label className="font-mono text-[9px] tracking-[0.18em] text-green-400/70 uppercase">
+          <label className="font-mono text-[9px] tracking-[0.18em] text-teal-400/70 uppercase">
             Mood
           </label>
           <select
             value={filters.mood}
             onChange={e => update('mood', e.target.value)}
-            className="w-full bg-[#0a1410] border border-green-500/25 rounded px-3 py-2 text-xs text-green-100 font-mono focus:outline-none focus:border-green-400/60 focus:shadow-[0_0_8px_rgba(34,197,94,0.15)] transition-all appearance-none cursor-pointer"
+            className="w-full bg-[var(--surface-2)] border border-[var(--line)] rounded px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-teal-400/60 focus:shadow-[0_0_8px_rgba(45,212,191,0.15)] transition-all appearance-none cursor-pointer"
           >
             <option value="">All Moods</option>
             {MOOD_VALUES.map(m => (
@@ -154,13 +144,13 @@ export default function FilterSidebar({ onFilterChange }: Props) {
 
         {/* Emotion */}
         <div className="flex flex-col gap-1.5">
-          <label className="font-mono text-[9px] tracking-[0.18em] text-green-400/70 uppercase">
+          <label className="font-mono text-[9px] tracking-[0.18em] text-teal-400/70 uppercase">
             Emotion
           </label>
           <select
             value={filters.emotion}
             onChange={e => update('emotion', e.target.value)}
-            className="w-full bg-[#0a1410] border border-green-500/25 rounded px-3 py-2 text-xs text-green-100 font-mono focus:outline-none focus:border-green-400/60 focus:shadow-[0_0_8px_rgba(34,197,94,0.15)] transition-all appearance-none cursor-pointer"
+            className="w-full bg-[var(--surface-2)] border border-[var(--line)] rounded px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-teal-400/60 focus:shadow-[0_0_8px_rgba(45,212,191,0.15)] transition-all appearance-none cursor-pointer"
           >
             <option value="">All Emotions</option>
             {EMOTION_VALUES.map(e => (
@@ -169,14 +159,26 @@ export default function FilterSidebar({ onFilterChange }: Props) {
           </select>
         </div>
 
+        {/* Distress toggle */}
+        <button
+          onClick={() => update('distress', !filters.distress)}
+          className={`w-full py-2 px-3 font-mono text-[10px] tracking-[0.18em] uppercase rounded border transition-all
+            ${filters.distress
+              ? 'border-rose-400/60 text-rose-300 bg-rose-500/10 shadow-[0_0_8px_rgba(251,113,133,0.15)]'
+              : 'border-rose-500/30 text-rose-400/60 hover:border-rose-400/50 hover:text-rose-300 hover:bg-rose-500/5'
+            }`}
+        >
+          {filters.distress ? '▲ Distress Signals Only' : '◈ Distress Signals Only'}
+        </button>
+
         {/* Clear button */}
         <button
           onClick={clearAll}
           disabled={!isActive}
-          className="w-full mt-1 py-2 px-3 font-mono text-[10px] tracking-[0.18em] uppercase rounded border transition-all
+          className="w-full py-2 px-3 font-mono text-[10px] tracking-[0.18em] uppercase rounded border transition-all
             disabled:opacity-25 disabled:cursor-not-allowed
-            border-green-500/30 text-green-400/70 hover:border-green-400/60 hover:text-green-300 hover:bg-green-500/5
-            disabled:hover:border-green-500/30 disabled:hover:text-green-400/70 disabled:hover:bg-transparent"
+            border-[var(--line)] text-teal-400/70 hover:border-teal-400/60 hover:text-teal-300 hover:bg-teal-500/5
+            disabled:hover:border-[var(--line)] disabled:hover:text-teal-400/70 disabled:hover:bg-transparent"
         >
           ✕ Clear Filters
         </button>
@@ -186,17 +188,19 @@ export default function FilterSidebar({ onFilterChange }: Props) {
       <div className="flex-1" />
 
       {/* Status footer */}
-      <div className="px-4 py-4 border-t border-green-500/20">
-        <p className="font-mono text-[9px] tracking-[0.15em] text-green-500/50 uppercase mb-2">
+      <div className="px-4 py-4 border-t border-[var(--line)]">
+        <p className="font-mono text-[9px] tracking-[0.15em] text-[var(--muted)] uppercase mb-2">
           Signal Status
         </p>
         <div className="flex items-center gap-2">
-          <div className="w-1.5 h-1.5 rounded-full bg-green-400 shadow-[0_0_4px_rgba(34,197,94,0.8)]" />
-          <span className="font-mono text-[10px] text-green-400/80">Online</span>
-          <span className="font-mono text-[10px] text-green-500/40 ml-auto">52 subjects</span>
+          <div className="w-1.5 h-1.5 rounded-full bg-teal-400 shadow-[0_0_4px_rgba(45,212,191,0.8)]" />
+          <span className="font-mono text-[10px] text-teal-400/80">Online</span>
+          {count !== undefined && (
+            <span className="font-mono text-[10px] text-[var(--muted)] ml-auto">{count} subjects</span>
+          )}
         </div>
-        <div className="mt-2 h-px bg-gradient-to-r from-green-500/30 via-green-400/10 to-transparent" />
-        <p className="font-mono text-[8px] tracking-[0.1em] text-green-500/30 uppercase mt-2">
+        <div className="mt-2 h-px bg-gradient-to-r from-teal-500/30 via-teal-400/10 to-transparent" />
+        <p className="font-mono text-[8px] tracking-[0.1em] text-[var(--muted)] uppercase mt-2">
           Thought-translation satellites: nominal
         </p>
       </div>
