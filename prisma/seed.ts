@@ -21,9 +21,13 @@ const ANIMAL_TAXA = [
 // Grizzly Bear is a subspecies of Brown Bear; Golden Retriever is a breed.
 // Map them to a query that iNaturalist actually resolves.
 const SEARCH_OVERRIDE: Record<string, { q: string; rank?: string }> = {
-  'Grizzly Bear':    { q: 'Ursus arctos', rank: 'species' },
-  'Golden Retriever':{ q: 'Canis lupus familiaris' },         // no rank filter — breed-level
-  'Pink River Dolphin': { q: 'Inia geoffrensis', rank: 'species' },
+  'Grizzly Bear':      { q: 'Ursus arctos', rank: 'species' },
+  'Golden Retriever':  { q: 'Canis lupus familiaris' },       // breed — no rank filter
+  'Mountain Gorilla':  { q: 'Gorilla beringei', rank: 'species' },
+  'Bengal Tiger':      { q: 'Panthera tigris', rank: 'species' },
+  'Siberian Tiger':    { q: 'Panthera tigris', rank: 'species' },
+  'Kiwi':              { q: 'Apteryx', rank: 'genus' },
+  'Pink River Dolphin':{ q: 'Inia geoffrensis', rank: 'species' },
   'Wandering Albatross':{ q: 'Diomedea exulans', rank: 'species' },
 }
 
@@ -33,7 +37,8 @@ async function fetchSpeciesPhoto(species: string): Promise<Photo> {
     q: override?.q ?? species,
     per_page: '5',
   })
-  if (override?.rank !== undefined || !override) params.set('rank', 'species')
+  const rank = override ? override.rank : 'species'
+  if (rank) params.set('rank', rank)
   for (const t of ANIMAL_TAXA) params.append('iconic_taxa[]', t)
   const endpoint = `https://api.inaturalist.org/v1/taxa?${params}`
   try {
