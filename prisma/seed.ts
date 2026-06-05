@@ -12,10 +12,19 @@ type Photo = { url: string | null; attribution: string | null }
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
 
+const ANIMAL_TAXA = [
+  'Mammalia', 'Aves', 'Reptilia', 'Amphibia', 'Actinopterygii',
+  'Insecta', 'Arachnida', 'Mollusca', 'Animalia',
+]
+
 async function fetchSpeciesPhoto(species: string): Promise<Photo> {
-  const endpoint = `https://api.inaturalist.org/v1/taxa?q=${encodeURIComponent(
-    species,
-  )}&rank=species&per_page=1`
+  const params = new URLSearchParams({
+    q: species,
+    rank: 'species',
+    per_page: '5',
+  })
+  for (const t of ANIMAL_TAXA) params.append('iconic_taxa[]', t)
+  const endpoint = `https://api.inaturalist.org/v1/taxa?${params}`
   try {
     const ctrl = new AbortController()
     const t = setTimeout(() => ctrl.abort(), 8000)
@@ -26,7 +35,10 @@ async function fetchSpeciesPhoto(species: string): Promise<Photo> {
     clearTimeout(t)
     if (!res.ok) return { url: null, attribution: null }
     const data = await res.json()
-    const taxon = data?.results?.[0]
+    // Pick the first result that is actually an animal (not a plant/fungus).
+    const taxon = (data?.results ?? []).find((r: any) =>
+      ANIMAL_TAXA.includes(r?.iconic_taxon_name),
+    )
     const photo = taxon?.default_photo
     if (!photo?.medium_url) return { url: null, attribution: null }
     return {
