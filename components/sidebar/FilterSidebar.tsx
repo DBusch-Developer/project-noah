@@ -57,8 +57,14 @@ export default function FilterSidebar({ onFilterChange, count }: Props) {
       {/* Header */}
       <div className="px-4 pt-5 pb-4 border-b border-[var(--line)]">
         <div className="flex items-center gap-2 mb-1">
-          <div className="w-2 h-2 rounded-full bg-teal-400 shadow-[0_0_6px_rgba(45,212,191,0.9)] animate-pulse" />
-          <span className="font-mono text-[10px] tracking-[0.2em] text-teal-400 uppercase">
+          <div
+            className="w-2 h-2 rounded-full"
+            style={{
+              background: 'radial-gradient(circle at 50% 40%, #8fd6e8, #4fd1c5 60%, #1f6b66)',
+              boxShadow: '0 0 10px rgba(79,209,197,0.6)',
+            }}
+          />
+          <span className="font-mono text-[10px] tracking-[0.2em] text-teal-200 uppercase">
             Project Noah
           </span>
         </div>
@@ -79,7 +85,7 @@ export default function FilterSidebar({ onFilterChange, count }: Props) {
 
         {/* Search */}
         <div className="flex flex-col gap-1.5">
-          <label className="font-mono text-[9px] tracking-[0.18em] text-teal-400/70 uppercase">
+          <label className="font-mono text-[9px] tracking-[0.18em] text-teal-200/70 uppercase">
             Search
           </label>
           <input
@@ -87,19 +93,19 @@ export default function FilterSidebar({ onFilterChange, count }: Props) {
             value={filters.search}
             onChange={e => update('search', e.target.value)}
             placeholder="name, species, region..."
-            className="w-full bg-[var(--surface-2)] border border-[var(--line)] rounded px-3 py-2 text-xs text-white placeholder-[var(--muted)] font-mono focus:outline-none focus:border-teal-400/60 focus:shadow-[0_0_8px_rgba(45,212,191,0.15)] transition-all"
+            className="w-full bg-[var(--surface-2)] border border-[var(--line)] rounded px-3 py-2 text-xs text-[var(--foreground)] placeholder-[var(--muted)]/40 font-mono focus:outline-none focus:border-teal-300/60 focus:shadow-[0_0_10px_rgba(79,209,197,0.18)] transition-all"
           />
         </div>
 
         {/* Species */}
         <div className="flex flex-col gap-1.5">
-          <label className="font-mono text-[9px] tracking-[0.18em] text-teal-400/70 uppercase">
+          <label className="font-mono text-[9px] tracking-[0.18em] text-teal-200/70 uppercase">
             Species
           </label>
           <select
             value={filters.species}
             onChange={e => update('species', e.target.value)}
-            className="w-full bg-[var(--surface-2)] border border-[var(--line)] rounded px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-teal-400/60 focus:shadow-[0_0_8px_rgba(45,212,191,0.15)] transition-all appearance-none cursor-pointer"
+            className="w-full bg-[var(--surface-2)] border border-[var(--line)] rounded px-3 py-2 text-xs text-[var(--foreground)] font-mono focus:outline-none focus:border-teal-300/60 focus:shadow-[0_0_10px_rgba(79,209,197,0.18)] transition-all appearance-none cursor-pointer"
           >
             <option value="">All Species</option>
             {SPECIES_LIST.map(s => (
@@ -110,13 +116,13 @@ export default function FilterSidebar({ onFilterChange, count }: Props) {
 
         {/* Region */}
         <div className="flex flex-col gap-1.5">
-          <label className="font-mono text-[9px] tracking-[0.18em] text-teal-400/70 uppercase">
+          <label className="font-mono text-[9px] tracking-[0.18em] text-teal-200/70 uppercase">
             Region
           </label>
           <select
             value={filters.region}
             onChange={e => update('region', e.target.value)}
-            className="w-full bg-[var(--surface-2)] border border-[var(--line)] rounded px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-teal-400/60 focus:shadow-[0_0_8px_rgba(45,212,191,0.15)] transition-all appearance-none cursor-pointer"
+            className="w-full bg-[var(--surface-2)] border border-[var(--line)] rounded px-3 py-2 text-xs text-[var(--foreground)] font-mono focus:outline-none focus:border-teal-300/60 focus:shadow-[0_0_10px_rgba(79,209,197,0.18)] transition-all appearance-none cursor-pointer"
           >
             <option value="">All Regions</option>
             {REGION_OPTIONS.map(r => (
@@ -127,13 +133,13 @@ export default function FilterSidebar({ onFilterChange, count }: Props) {
 
         {/* Mood */}
         <div className="flex flex-col gap-1.5">
-          <label className="font-mono text-[9px] tracking-[0.18em] text-teal-400/70 uppercase">
+          <label className="font-mono text-[9px] tracking-[0.18em] text-teal-200/70 uppercase">
             Mood
           </label>
           <select
             value={filters.mood}
             onChange={e => update('mood', e.target.value)}
-            className="w-full bg-[var(--surface-2)] border border-[var(--line)] rounded px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-teal-400/60 focus:shadow-[0_0_8px_rgba(45,212,191,0.15)] transition-all appearance-none cursor-pointer"
+            className="w-full bg-[var(--surface-2)] border border-[var(--line)] rounded px-3 py-2 text-xs text-[var(--foreground)] font-mono focus:outline-none focus:border-teal-300/60 focus:shadow-[0_0_10px_rgba(79,209,197,0.18)] transition-all appearance-none cursor-pointer"
           >
             <option value="">All Moods</option>
             {MOOD_VALUES.map(m => (
@@ -144,13 +150,13 @@ export default function FilterSidebar({ onFilterChange, count }: Props) {
 
         {/* Emotion */}
         <div className="flex flex-col gap-1.5">
-          <label className="font-mono text-[9px] tracking-[0.18em] text-teal-400/70 uppercase">
+          <label className="font-mono text-[9px] tracking-[0.18em] text-teal-200/70 uppercase">
             Emotion
           </label>
           <select
             value={filters.emotion}
             onChange={e => update('emotion', e.target.value)}
-            className="w-full bg-[var(--surface-2)] border border-[var(--line)] rounded px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-teal-400/60 focus:shadow-[0_0_8px_rgba(45,212,191,0.15)] transition-all appearance-none cursor-pointer"
+            className="w-full bg-[var(--surface-2)] border border-[var(--line)] rounded px-3 py-2 text-xs text-[var(--foreground)] font-mono focus:outline-none focus:border-teal-300/60 focus:shadow-[0_0_10px_rgba(79,209,197,0.18)] transition-all appearance-none cursor-pointer"
           >
             <option value="">All Emotions</option>
             {EMOTION_VALUES.map(e => (
@@ -177,8 +183,8 @@ export default function FilterSidebar({ onFilterChange, count }: Props) {
           disabled={!isActive}
           className="w-full py-2 px-3 font-mono text-[10px] tracking-[0.18em] uppercase rounded border transition-all
             disabled:opacity-25 disabled:cursor-not-allowed
-            border-[var(--line)] text-teal-400/70 hover:border-teal-400/60 hover:text-teal-300 hover:bg-teal-500/5
-            disabled:hover:border-[var(--line)] disabled:hover:text-teal-400/70 disabled:hover:bg-transparent"
+            border-[var(--line)] text-teal-200/70 hover:border-teal-200/60 hover:text-teal-300 hover:bg-teal-500/5
+            disabled:hover:border-[var(--line)] disabled:hover:text-teal-200/70 disabled:hover:bg-transparent"
         >
           ✕ Clear Filters
         </button>
@@ -193,13 +199,13 @@ export default function FilterSidebar({ onFilterChange, count }: Props) {
           Signal Status
         </p>
         <div className="flex items-center gap-2">
-          <div className="w-1.5 h-1.5 rounded-full bg-teal-400 shadow-[0_0_4px_rgba(45,212,191,0.8)]" />
-          <span className="font-mono text-[10px] text-teal-400/80">Online</span>
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_5px_rgba(94,224,160,0.8)]" />
+          <span className="font-mono text-[10px] text-emerald-300/90">Online</span>
           {count !== undefined && (
-            <span className="font-mono text-[10px] text-[var(--muted)] ml-auto">{count} subjects</span>
+            <span className="font-mono text-[10px] text-[var(--muted)]/50 ml-auto">{count} subjects</span>
           )}
         </div>
-        <div className="mt-2 h-px bg-gradient-to-r from-teal-500/30 via-teal-400/10 to-transparent" />
+        <div className="mt-2 h-px bg-gradient-to-r from-teal-400/30 via-cyan-400/12 to-transparent" />
         <p className="font-mono text-[8px] tracking-[0.1em] text-[var(--muted)] uppercase mt-2">
           Thought-translation satellites: nominal
         </p>
