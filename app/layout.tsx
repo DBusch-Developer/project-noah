@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Project Noah",
-  description: "Satellite-powered global animal intelligence network",
+  title: "Project Noah — Live Animal Thoughtstream",
+  description: "A living, real-time map of animal consciousness — decoded thoughts from a planetary thought-translation array.",
 };
 
 export default function RootLayout({

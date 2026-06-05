@@ -1,8 +1,24 @@
 @import "tailwindcss";
 
+/*
+  Project Noah — "Cryostation" palette
+  Cold scientific instrumentation over satellite imagery.
+  Deep navy-black void, teal/ice accents, restrained and premium.
+*/
 :root {
-  --background: #080c0f;
-  --foreground: #e4ffe4;
+  --background: #060b10;       /* near-black navy void */
+  --surface:    #0a131a;       /* panel base */
+  --surface-2:  #0f1d27;       /* raised panel */
+  --foreground: #e8f4f8;       /* cool ice white */
+  --muted:      #7d97a4;       /* desaturated slate */
+
+  /* Instrumentation accents — cold, narrow range */
+  --teal:   #4fd1c5;           /* primary signal */
+  --ice:    #8fd6e8;           /* secondary / highlight */
+  --cyan:   #38b2ac;           /* deep accent */
+  --frost:  #cfe9f0;           /* near-white tint */
+
+  --line: rgba(79, 209, 197, 0.14);
 }
 
 @theme inline {
@@ -12,38 +28,75 @@
   --font-mono: var(--font-geist-mono);
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
-  background: var(--background);
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(79, 209, 197, 0.06), transparent 55%),
+    var(--background);
   color: var(--foreground);
 }
 
-/* Mapbox popup dark theme overrides */
+/* ── Mapbox popup: cold glass ───────────────────────────────── */
 .mapboxgl-popup-content {
-  background: #0a1a0f !important;
-  border: 1px solid rgba(34, 197, 94, 0.3) !important;
-  border-radius: 6px !important;
+  background: rgba(10, 19, 26, 0.94) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(79, 209, 197, 0.26) !important;
+  border-radius: 8px !important;
   padding: 12px 14px !important;
-  box-shadow: 0 0 24px rgba(34, 197, 94, 0.12) !important;
+  box-shadow: 0 0 28px rgba(79, 209, 197, 0.14) !important;
 }
 
 .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
-  border-top-color: rgba(34, 197, 94, 0.3) !important;
+  border-top-color: rgba(79, 209, 197, 0.26) !important;
 }
 
 .mapboxgl-popup-close-button {
-  color: rgba(34, 197, 94, 0.5) !important;
+  color: rgba(143, 214, 232, 0.6) !important;
   font-size: 18px !important;
   right: 6px !important;
   top: 4px !important;
   background: transparent !important;
 }
-
 .mapboxgl-popup-close-button:hover {
-  color: rgb(34, 197, 94) !important;
+  color: var(--ice) !important;
   background: transparent !important;
 }
 
+.mapboxgl-ctrl-group {
+  background: rgba(10, 19, 26, 0.88) !important;
+  border: 1px solid var(--line) !important;
+}
+.mapboxgl-ctrl-group button + button { border-top: 1px solid var(--line) !important; }
+
+/* ── Animations ─────────────────────────────────────────────── */
 @keyframes npc-float {
   0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-4px); }
+  50%      { transform: translateY(-4px); }
 }
+
+@keyframes feed-in {
+  0%   { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(0.6); opacity: 0.6; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+@keyframes boot-bar {
+  0%   { width: 0%; }
+  100% { width: 100%; }
+}
+
+/* thin custom scrollbar for the feed */
+.noah-scroll::-webkit-scrollbar { width: 6px; }
+.noah-scroll::-webkit-scrollbar-track { background: transparent; }
+.noah-scroll::-webkit-scrollbar-thumb {
+  background: rgba(79, 209, 197, 0.2);
+  border-radius: 3px;
+}
+.noah-scroll::-webkit-scrollbar-thumb:hover { background: rgba(79, 209, 197, 0.4); }
